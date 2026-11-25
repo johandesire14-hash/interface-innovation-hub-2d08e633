@@ -398,3 +398,29 @@ export async function resolvePublicAffiliateCode(
     throw firestoreError(error, "la résolution du lien affilié public");
   }
 }
+
+/** Links other people created on this creator's products (creator side only). */
+export async function getAffiliateLinksForCreator(creatorUid: string): Promise<AffiliateLink[]> {
+  if (!creatorUid || !db) return [];
+  try {
+    const snapshot = await getDocs(
+      query(collection(db, "affiliateLinks"), where("creatorUid", "==", creatorUid)),
+    );
+    return snapshot.docs
+      .map((s) => {
+        const data = s.data();
+        return {
+          id: s.id,
+          affiliateUid: String(data["affiliateUid"]),
+          productId: String(data["productId"]),
+          productName: String(data["productName"] || "Produit"),
+          commissionRate: Number(data["commissionRate"]),
+          code: String(data["code"]),
+          createdAt: data["createdAt"],
+        };
+      })
+      .filter((link) => link.affiliateUid !== creatorUid);
+  } catch (error) {
+    throw firestoreError(error, "la lecture des affiliés de vos produits");
+  }
+}
