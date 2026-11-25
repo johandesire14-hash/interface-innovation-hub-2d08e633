@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { RefreshCw, Users } from "lucide-react";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 import { getAffiliateLinksForCreator, type AffiliateLink } from "../../services/affiliateService";
 import { getCreatorAffiliateSales, type AffiliateInvitation } from "../../services/affiliateHistoryService";
 import { computeLinkPerformance, summarizeByAffiliate } from "../../services/affiliateEarnings";
