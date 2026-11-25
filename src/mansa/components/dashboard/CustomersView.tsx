@@ -923,7 +923,7 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
             value={messageDraft}
             onChange={(event) => setMessageDraft(event.target.value)}
             rows={4}
-            placeholder="Écrire un message…"
+            placeholder="Écrire un message…" enterKeyHint="send"
             enterKeyHint="send"
             className="w-full resize-y rounded-xl border border-white/10 bg-black/30 p-3 text-sm text-white outline-none focus:border-blue-500"
           />

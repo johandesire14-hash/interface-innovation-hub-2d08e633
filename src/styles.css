@@ -370,3 +370,35 @@ html:not(.dark) .mansa-palette:not(:has(.afhub-home)) h3 + p {
     transition: none;
   }
 }
+
+/* Mobile UX & typography best practices (applied site-wide) */
+@layer base {
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  a, button, [role="button"], label, summary, input, select, textarea {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  :focus-visible { outline: 2px solid var(--color-ring); outline-offset: 2px; }
+  @media (max-width: 767px) {
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), select, textarea { font-size: max(16px, 1em); }
+  }
+  a { text-underline-offset: 0.2em; text-decoration-thickness: from-font; text-decoration-skip-ink: auto; }
+  sup, sub { line-height: 0; position: relative; vertical-align: baseline; font-size: 0.75em; }
+  sup { top: -0.5em; } sub { bottom: -0.25em; }
+  abbr { font-variant-caps: all-small-caps; letter-spacing: 0.02em; text-decoration: none; }
+  q { quotes: "« " " »" "“" "”"; }
+  p, li, dd, blockquote { hyphens: auto; -webkit-hyphens: auto; overflow-wrap: break-word; }
+  h1, h2, h3 { text-wrap: balance; overflow-wrap: break-word; }
+  h1 { font-size: clamp(2rem, 1.4rem + 3vw, 3.75rem); }
+  h2 { font-size: clamp(1.5rem, 1.15rem + 1.75vw, 2.5rem); }
+  [role="dialog"], [data-radix-scroll-area-viewport], .overflow-y-auto, .overflow-auto, .overflow-x-auto { overscroll-behavior: contain; }
+  .overflow-x-auto { scroll-snap-type: x proximity; }
+  .overflow-x-auto > * { scroll-snap-align: start; }
+  @supports (text-box: trim-both cap alphabetic) {
+    button, [data-slot="badge"] { text-box: trim-both cap alphabetic; }
+  }
+}
+@utility snap-carousel { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; & > * { scroll-snap-align: start; flex-shrink: 0; } }
+@utility card-title-clamp { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
+/* Reserve bold width: wrap text in data-text attr to avoid layout shift */
+@utility bold-stable { display: inline-grid; &::after { content: attr(data-text); font-weight: 700; visibility: hidden; height: 0; overflow: hidden; } }
