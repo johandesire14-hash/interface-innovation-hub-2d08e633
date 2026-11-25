@@ -368,3 +368,6 @@ export const useAuth = () => {
   }
   return context;
 };
+
+/** Same as useAuth but returns undefined outside an AuthProvider (used by demo previews). */
+export const useOptionalAuth = () => useContext(AuthContext);

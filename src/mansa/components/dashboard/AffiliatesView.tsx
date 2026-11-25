@@ -15,7 +15,7 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { useAuth } from "../../context/AuthContext";
+import { useOptionalAuth } from "../../context/AuthContext";
 import {
   AffiliateLink,
   AffiliateProduct,
@@ -38,6 +38,8 @@ interface AffiliatesViewProps {
   userId?: string;
   isPersonalWorkspace?: boolean;
   currency?: CurrencyCode | string;
+  /** Sample data for the visual preview page: skips loading and link storage. */
+  demo?: { products: AffiliateProduct[]; links: AffiliateLink[]; invitations: AffiliateInvitation[] };
 }
 
 const percentLabel = (rate: number) => `${String(rate)} %`;
@@ -68,9 +70,9 @@ const formatProductPrice = (amount: number, currency: string) => {
   }
 };
 
-export const AffiliatesView: React.FC<AffiliatesViewProps> = ({ currency = "XOF" }) => {
-  const { user } = useAuth();
-  const affiliateUid = user?.uid || "";
+export const AffiliatesView: React.FC<AffiliatesViewProps> = ({ currency = "XOF", demo }) => {
+  const auth = useOptionalAuth();
+  const affiliateUid = demo ? "demo-affiliate" : auth?.user?.uid || "";
   const [products, setProducts] = useState<AffiliateProduct[]>([]);
   const [links, setLinks] = useState<AffiliateLink[]>([]);
   const [loading, setLoading] = useState(true);
@@ -96,6 +98,14 @@ export const AffiliatesView: React.FC<AffiliatesViewProps> = ({ currency = "XOF"
         setLoading(false);
         return;
       }
+      if (demo) {
+        setProducts(demo.products);
+        setLinks(demo.links);
+        setInvitations(demo.invitations);
+        setLoading(false);
+        setRefreshing(false);
+        return;
+      }
       if (showRefresh) setRefreshing(true);
       else setLoading(true);
       setLoadError("");
@@ -119,7 +129,7 @@ export const AffiliatesView: React.FC<AffiliatesViewProps> = ({ currency = "XOF"
         setRefreshing(false);
       }
     },
-    [affiliateUid],
+    [affiliateUid, demo],
   );
 
   useEffect(() => {
@@ -146,7 +156,9 @@ export const AffiliatesView: React.FC<AffiliatesViewProps> = ({ currency = "XOF"
     setCreating(true);
     setCreateError("");
     try {
-      const link = await createOrGetAffiliateLink(affiliateUid, selectedProduct);
+      const link = demo
+        ? { id: `demo-${selectedProduct.id}`, affiliateUid, productId: selectedProduct.id, productName: selectedProduct.name, commissionRate: selectedProduct.affiliateCommissionRate, code: `DEMO${selectedProduct.id.toUpperCase()}` }
+        : await createOrGetAffiliateLink(affiliateUid, selectedProduct);
       setCreatedLink(link);
       setLinks((existing) => [link, ...existing.filter((item) => item.id !== link.id)]);
     } catch (error) {

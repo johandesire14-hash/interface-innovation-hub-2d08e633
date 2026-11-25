@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApercuAffiliesRouteImport } from './routes/apercu-affilies'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as CguRouteImport } from './routes/cgu'
 import { Route as DocumentationRouteImport } from './routes/documentation'
@@ -22,6 +23,11 @@ import { Route as AffiliateCodeRouteImport } from './routes/affiliate.$code'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApercuAffiliesRoute = ApercuAffiliesRouteImport.update({
+  id: '/apercu-affilies',
+  path: '/apercu-affilies',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRoute = AppRouteImport.update({
@@ -67,6 +73,7 @@ const AffiliateCodeRoute = AffiliateCodeRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/apercu-affilies': typeof ApercuAffiliesRoute
   '/app': typeof AppRoute
   '/cgu': typeof CguRoute
   '/documentation': typeof DocumentationRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/apercu-affilies': typeof ApercuAffiliesRoute
   '/app': typeof AppRoute
   '/cgu': typeof CguRoute
   '/documentation': typeof DocumentationRoute
@@ -90,6 +98,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/apercu-affilies': typeof ApercuAffiliesRoute
   '/app': typeof AppRoute
   '/cgu': typeof CguRoute
   '/documentation': typeof DocumentationRoute
@@ -103,6 +112,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/apercu-affilies'
     | '/app'
     | '/cgu'
     | '/documentation'
@@ -114,6 +124,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/apercu-affilies'
     | '/app'
     | '/cgu'
     | '/documentation'
@@ -125,6 +136,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/apercu-affilies'
     | '/app'
     | '/cgu'
     | '/documentation'
@@ -137,6 +149,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApercuAffiliesRoute: typeof ApercuAffiliesRoute
   AppRoute: typeof AppRoute
   CguRoute: typeof CguRoute
   DocumentationRoute: typeof DocumentationRoute
@@ -154,6 +167,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/apercu-affilies': {
+      id: '/apercu-affilies'
+      path: '/apercu-affilies'
+      fullPath: '/apercu-affilies'
+      preLoaderRoute: typeof ApercuAffiliesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app': {
@@ -217,6 +237,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApercuAffiliesRoute: ApercuAffiliesRoute,
   AppRoute: AppRoute,
   CguRoute: CguRoute,
   DocumentationRoute: DocumentationRoute,
