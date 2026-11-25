@@ -15,6 +15,7 @@ import {
   Users,
   X,
 } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
 import {
   AffiliateLink,
   AffiliateProduct,
@@ -69,15 +70,9 @@ const formatProductPrice = (amount: number, currency: string) => {
   }
 };
 
-// Read the shared auth context without throwing, so the demo preview works outside the dashboard.
-const FALLBACK_AUTH_CONTEXT = React.createContext<{ user?: { uid?: string } | null } | undefined>(undefined);
-
 export const AffiliatesView: React.FC<AffiliatesViewProps> = ({ currency = "XOF", demo }) => {
-  const auth = React.useContext(
-    ((globalThis as Record<string, unknown>)["__mansaAuthContext__"] as React.Context<{ user?: { uid?: string } | null } | undefined>) ??
-      FALLBACK_AUTH_CONTEXT,
-  );
-  const affiliateUid = demo ? "demo-affiliate" : auth?.user?.uid || "";
+  const { user } = useAuth();
+  const affiliateUid = demo ? "demo-affiliate" : user?.uid || "";
   const [products, setProducts] = useState<AffiliateProduct[]>([]);
   const [links, setLinks] = useState<AffiliateLink[]>([]);
   const [loading, setLoading] = useState(true);
