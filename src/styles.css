@@ -402,3 +402,20 @@ html:not(.dark) .mansa-palette:not(:has(.afhub-home)) h3 + p {
 @utility card-title-clamp { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
 /* Reserve bold width: wrap text in data-text attr to avoid layout shift */
 @utility bold-stable { display: inline-grid; &::after { content: attr(data-text); font-weight: 700; visibility: hidden; height: 0; overflow: hidden; } }
+
+/* Design rules: hierarchy, spacing, tables, shadows (applied site-wide) */
+:root {
+  --shadow-layered: 0 1px 1px color-mix(in oklab, black 8%, transparent), 0 2px 4px color-mix(in oklab, black 6%, transparent), 0 8px 16px -4px color-mix(in oklab, black 8%, transparent);
+}
+@theme inline { --shadow-layered: var(--shadow-layered); }
+@layer base {
+  body { font-weight: 400; }
+  p { text-align: left; }
+  h1, h2, h3, h4 { line-height: 1.15; }
+  p, li { line-height: 1.6; }
+  :where(p, ul, ol, div, section) + :where(h2, h3, h4) { margin-top: 1.5em; }
+  :where(h2, h3, h4) + :where(p, ul, ol) { margin-top: 0.5em; }
+  td, th { font-variant-numeric: tabular-nums; }
+  td[data-numeric], th[data-numeric], td.num, th.num { text-align: right; }
+  label { display: inline-block; }
+}
